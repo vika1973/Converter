@@ -1,0 +1,34 @@
+<h1>{{ title }}</h1>
+<div style="float: left; ">
+  <form action="">
+    <p style="font-size: 20px;">Міняю</p>
+    <select class="form-fromCurrency" name="fromCurrencySelect" (change)="changefromCurrency($event)">      
+      <option *ngFor="let currency of currencies" [value]="currency.rate">
+        {{ currency.name }}                 
+      </option>                
+    </select>              
+    <br />
+    <br />
+    <input type="text" name="inputbox" onblur="convert(this.form)" (input)="fromCurrencyInput($event)">  
+    <p style="color: darkblue; font-weight: bold;">{{ currency1 }}</p>
+  </form>
+</div>
+<div>
+  <form action="">
+    <p style="font-size: 20px;">Отримую</p>
+    <select class="form-fromCurrency" name="toCurrencySelect" (change)="changeToCurrency($event)">    
+      <option *ngFor="let currency of currencies" [value]="currency.rate">
+        {{ currency.name }}
+      </option>
+    </select>    
+    <br />
+    <br />
+    <input type="text" (input)="toCurrencyInput($event)">  
+    <p style="color: darkblue; font-weight: bold;">{{ currency2 }}</p>
+  </form>
+</div>
+<div>
+  <p style="margin: 40px; color: red;  font-weight: bold; font-size: 20px;">RESULT</p>
+  <p style="margin: 20px; color: darkblue; font-weight: bold; font-size: 25px;">{{ result }}</p>
+</div>
+<ng-container></ng-container>
