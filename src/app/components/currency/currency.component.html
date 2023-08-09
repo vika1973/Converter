@@ -1,1 +1,19 @@
-<h1>{{ title }}</h1>
+<h1>{{ title | uppercase }}</h1>
+
+<ng-container *ngIf="currencies.length >= 2; else this.lessOne">        
+    <p style="font-weight: bold; font-size: 20px;" 
+       *ngFor="let currency of currencies">{{ currency.rate | currency : currency.name : '' : '2.2-2' | currencyCorrect : currency.name }}
+    </p>    
+</ng-container>
+
+<ng-template #lessOne>
+    <ng-container *ngIf="currencies.length == 1; else lessZero">
+        <p style="font-weight: bold; font-size: 20px;">Одна валюта: {{ currencies[0].rate | currency : currencies[0].name : '' : '2.2-2' | 
+           currencyCorrect : currencies[0].name }}
+        </p>
+    </ng-container>
+</ng-template>
+
+<ng-template #lessZero>
+    <p style="font-weight: bold; font-size: 20px; color: brown;">Нажаль, валют нема</p>
+</ng-template>

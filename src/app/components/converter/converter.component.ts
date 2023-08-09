@@ -60,7 +60,7 @@ export class ConverterComponent {
   {
     name: "USD",
     full_name : "Долар США",
-    rate: 36.5
+    rate: 36.50
   },
   {
     name: "EUR",
