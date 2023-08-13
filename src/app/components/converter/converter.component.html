@@ -1,34 +1,36 @@
 <h1>{{ title }}</h1>
 <div style="float: left; ">
   <form action="">
-    <p style="font-size: 20px;">Міняю</p>
-    <select class="form-fromCurrency" name="fromCurrencySelect" (change)="changefromCurrency($event)">      
-      <option *ngFor="let currency of currencies" [value]="currency.rate">
-        {{ currency.name }}                 
-      </option>                
+    <p style="font-size: 20px;">Міняю</p>        
+    <select #c1 class="form-fromCurrency" name="fromCurrencySelect" (change)="changeFromCurrencySelect(c1.value)">            
+      <option value="USD">USD</option>
+      <option value="EUR">EUR</option>
+      <option value="PLN">PLN</option>                  
     </select>              
     <br />
     <br />
-    <input type="text" name="inputbox" onblur="convert(this.form)" (input)="fromCurrencyInput($event)">  
+    <input type="text" name="inputbox" (input)="fromCurrencyInput($event)" placeholder="from" value="{{convert_from}}">  
     <p style="color: darkblue; font-weight: bold;">{{ currency1 }}</p>
   </form>
 </div>
 <div>
   <form action="">
-    <p style="font-size: 20px;">Отримую</p>
-    <select class="form-fromCurrency" name="toCurrencySelect" (change)="changeToCurrency($event)">    
-      <option *ngFor="let currency of currencies" [value]="currency.rate">
-        {{ currency.name }}
-      </option>
+    <p style="font-size: 20px;">Отримую</p>    
+    <select #c2 class="form-fromCurrency" name="toCurrencySelect" (change)="changeToCurrencySelect(c2.value)">    
+      <option value="EUR">EUR</option>
+      <option value="USD">USD</option>
+      <option value="PLN">PLN</option>                
     </select>    
     <br />
     <br />
-    <input type="text" (input)="toCurrencyInput($event)">  
+    <input type="text" (input)="toCurrencyInput($event)" placeholder="to" value="{{convert_to}}">  
     <p style="color: darkblue; font-weight: bold;">{{ currency2 }}</p>
   </form>
 </div>
 <div>
   <p style="margin: 40px; color: blueviolet;  font-weight: bold; font-size: 20px;">RESULT</p>
-  <p style="margin: 20px; color: darkblue; font-weight: bold; font-size: 25px;">{{ result }}</p>
+  <p style="margin: 20px; color: darkblue; font-weight: bold; font-size: 25px;">{{ result | currency : '' : '' : '2.2-2'}}</p>
 </div>
-<ng-container></ng-container>
+
+<p style="font-weight: bold; font-size: 20px; color: brown;">{{ convert_from }}</p>
+<p style="font-weight: bold; font-size: 20px; color: brown;">{{ convert_to }}</p>

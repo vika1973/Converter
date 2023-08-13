@@ -7,6 +7,8 @@
       "type": "chrome",
       "request": "launch",
       "preLaunchTask": "npm: start",
+      // "resolveSourceMapLocations": 
+        // "${workspaceFolder}/**",       
       "url": "http://localhost:4200/"
     },
     {
@@ -14,6 +16,7 @@
       "type": "chrome",
       "request": "launch",
       "preLaunchTask": "npm: test",
+      // "${workspaceFolder}/**",   
       "url": "http://localhost:9876/debug.html"
     }
   ]

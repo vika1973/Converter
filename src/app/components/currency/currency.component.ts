@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { CurrencyDataService } from '../services/currency-data.service';
 
 @Component({
   selector: 'app-currency',
@@ -6,23 +7,14 @@ import { Component } from '@angular/core';
   styleUrls: ['./currency.component.css']
 })
 export class CurrencyComponent {
-  title = 'Курси валют'; 
+  title = 'Курси валют';  
 
-  currencies: any = [
-  {
-   name: "USD",
-   full_name : "Долар США",
-   rate: 36.50
- },
- {
-   name: "EUR",
-   full_name : "Євро",
-   rate: 40.01
- },
- {
-  name: "PLN",
-   full_name : "Злотий",
-   rate: 9.01
- }
-]
+  constructor(public api: CurrencyDataService){  }   
+  
+  @Input() currencies: any = [
+    {
+      cc: "",
+      rate: 0
+    }   
+    ];                     
 }
