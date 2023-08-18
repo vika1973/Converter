@@ -1,7 +1,43 @@
-div {
-    padding: 5px;      
- }
- h1 {
-    color: darkgreen;
- }
- 
+:host {
+  display: flex;    
+  flex-wrap: wrap;  
+  margin: 1rem 0 1rem 1rem;   
+}
+
+form {
+  margin-top: 50px;  
+}
+
+.currency_from, .currency_to {
+  flex-direction: row;
+  width: 300px;        
+}
+    
+input{    
+  text-align: right;
+  font-size: 30px;   
+} 
+
+span {
+  margin-right: 5px;
+}
+
+mat-form-field {
+  height: 100px;
+}
+
+mat-label{
+  font-size: 20px;   
+}
+
+mat-select{
+  border: 10px;
+  height: 1px;
+  padding: 0px 10px 0px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+mat-error{
+  font-size: 14px;
+}

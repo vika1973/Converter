@@ -1,36 +1,32 @@
 <h1>{{ title }}</h1>
-<div style="float: left; ">
-  <form action="">
-    <p style="font-size: 20px;">Міняю</p>        
-    <select #c1 class="form-fromCurrency" name="fromCurrencySelect" (change)="changeFromCurrencySelect(c1.value)">            
-      <option value="USD">USD</option>
-      <option value="EUR">EUR</option>
-      <option value="PLN">PLN</option>                  
-    </select>              
-    <br />
-    <br />
-    <input type="text" name="inputbox" (input)="fromCurrencyInput($event)" placeholder="from" value="{{convert_from}}">  
-    <p style="color: darkblue; font-weight: bold;">{{ currency1 }}</p>
-  </form>
-</div>
-<div>
-  <form action="">
-    <p style="font-size: 20px;">Отримую</p>    
-    <select #c2 class="form-fromCurrency" name="toCurrencySelect" (change)="changeToCurrencySelect(c2.value)">    
-      <option value="EUR">EUR</option>
-      <option value="USD">USD</option>
-      <option value="PLN">PLN</option>                
-    </select>    
-    <br />
-    <br />
-    <input type="text" (input)="toCurrencyInput($event)" placeholder="to" value="{{convert_to}}">  
-    <p style="color: darkblue; font-weight: bold;">{{ currency2 }}</p>
-  </form>
-</div>
-<div>
-  <p style="margin: 40px; color: blueviolet;  font-weight: bold; font-size: 20px;">RESULT</p>
-  <p style="margin: 20px; color: darkblue; font-weight: bold; font-size: 25px;">{{ result | currency : '' : '' : '2.2-2'}}</p>
-</div>
+<form class="currency_from" [formGroup]="currency_control_from">   
+  <mat-form-field appearance="outline">
+    <mat-label>Обмінюю</mat-label>     
+    <mat-select formControlName="fromSelectControl" (selectionChange)="currency_from_change($event)">                  
+      <mat-option value="USD">USD</mat-option>
+      <mat-option value="EUR">EUR</mat-option>
+      <mat-option value="UAH">UAH</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field appearance="outline">    
+    <span style="color: rgb(226, 101, 18);" matTextPrefix>{{ currency_data_from.symb }}</span>
+    <input matInput formControlName="fromInputControl" placeholder="Enter Amount" (input)="currency_from_input($event)" (focusout)="currency_from_input($event)">            
+    <mat-error *ngIf='this.currency_control_from.get("fromInputControl")!.status == "INVALID"'>Invalid amount number (accesable only: numbers, and dot). Example: 12000.35</mat-error>
+  </mat-form-field>         
+</form>
 
-<p style="font-weight: bold; font-size: 20px; color: brown;">{{ convert_from }}</p>
-<p style="font-weight: bold; font-size: 20px; color: brown;">{{ convert_to }}</p>
+<form class="currency_to" [formGroup]="currency_control_to">      
+  <mat-form-field appearance="outline">
+    <mat-label>Отримую</mat-label>
+    <mat-select formControlName="toSelectControl" (selectionChange)="currency_to_change($event)">            
+      <mat-option value="USD">USD</mat-option>
+      <mat-option value="EUR">EUR</mat-option>
+      <mat-option value="UAH">UAH</mat-option>      
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field appearance="outline">
+    <span style="color: rgb(226, 101, 18);" matTextPrefix>{{ currency_data_to.symb }}</span>
+    <input matInput formControlName="toInputControl" placeholder="Enter Amount" (input)="currency_to_input($event)" (focusout)="currency_to_input($event)">
+    <mat-error *ngIf='this.currency_control_to.get("toInputControl")!.status == "INVALID"'>Invalid amount number (accesable only: numbers, and dot). Example: 12000.35</mat-error>
+  </mat-form-field>         
+</form>

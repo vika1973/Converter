@@ -1,8 +1,6 @@
-import { NgIf } from '@angular/common';
-import { Component, Input } from '@angular/core';
-import { FormsModule }   from '@angular/forms';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, numberAttribute } from '@angular/core';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { CurrencyDataService } from '../services/currency-data.service';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-converter',
@@ -14,90 +12,99 @@ export class ConverterComponent {
   title = 'Конвертер валют';
 
   constructor(public api: CurrencyDataService){  } 
-
-  @Input() currencies:  any = [
+  
+  @Input() currencies: any = [
     {
       cc: "",
       rate: 0
     }   
     ];                     
+    
+  @Input() usd : number = 0;
+  @Input() eur : number = 0;
 
-  convert_from: number = Number(localStorage.getItem("convert_from"));
-  convert_to: number = Number(localStorage?.getItem("convert_to"));
+  currency_list = {
+    name: ["USD", "EUR", "UAH"],
+    symb: ["$", "€", "₴ "],
+  };
 
-  currency1 : number = 0;
-  currency2 : number = 0;
-  result : number = 0;
-  base = '';  
-  
-  //курс валюты, которую нужно поменять
-  fromCurrencyKurs : number = 0;  
-  //курс валюты, на которую нужно поменять
-  toCurrencyKurs : number = 0;   
-  
-  setRates( a: string, mode : number ) {    
-    console.log(this.currencies);
-    this.currencies.forEach((currency: {cc: string, rate: number}) => {     
-      if (currency.cc == a && mode == 0){       
-        this.fromCurrencyKurs = currency.rate;
-        console.log("Курс fromCurrencyKurs = " + this.fromCurrencyKurs);
-      }
-      if (currency.cc == a && mode == 1){        
-        this.toCurrencyKurs = currency.rate;
-        console.log("Курс toCurrencyKurs = " + this.toCurrencyKurs);
-      }    
-    });    
-  }
-  
-  changeFromCurrencySelect(a: string) {
-    this.base = a;     
-    this.setRates(a, 0);
-    this.result = this.currency1 * this.fromCurrencyKurs;
-    console.log(this.fromCurrencyKurs);                                                   
-  }
-  
-  fromCurrencyInput(e: any): void{   
-    localStorage.setItem("convert_from", e.target.value);
-    this.convert_from = Number(localStorage.getItem("convert_from"));
-    this.result = 0;
-    if (this.fromCurrencyKurs==0)   
-    {
-      this.currencies.forEach((currency: {cc: string, rate: number}) => { 
-        if (currency.cc == "USD"){       
-          this.fromCurrencyKurs = currency.rate;          
-        }                                
-      });    
-    }       
-    console.log(this.fromCurrencyKurs);
-    this.currency1 = e.target.value;       
-    this.result = this.currency1 * this.fromCurrencyKurs;
-    console.log(this.fromCurrencyKurs);
-    console.log(this.result);    
-  }
+  currency_data_from = {
+    name: this.currency_list.name[0],
+    symb: this.currency_list.symb[0]
+  };
 
-  changeToCurrencySelect(a: string) {
-    this.base = a;     
-    this.setRates(a, 1);
-    this.result = this.currency2 * this.toCurrencyKurs;
-    console.log(this.toCurrencyKurs);                                                   
-  }
+  currency_data_to = {
+    name: this.currency_list.name[1],
+    symb: this.currency_list.symb[1]
+  };
 
-  toCurrencyInput(e: any): void{   
-    localStorage.setItem("convert_to", e.target.value);
-    this.convert_to = Number(localStorage.getItem("convert_to"));
-    this.result = 0;
-    if (this.toCurrencyKurs==0)   
-    {
-      this.currencies.forEach((currency: {cc: string, rate: number}) => { 
-        if (currency.cc == "EUR"){       
-          this.toCurrencyKurs = currency.rate;          
-        }                                
-      });    
-    }       
-    console.log(this.toCurrencyKurs);
-    this.currency2 = e.target.value;       
-    this.result = this.currency2 * this.toCurrencyKurs;
-    console.log(this.toCurrencyKurs);
-    console.log(this.result);    
+  currency_control_from = new FormGroup({
+    fromInputControl: new FormControl('', Validators.pattern(/^\d+([.])?(\d+)?$/)),
+    fromSelectControl: new FormControl(this.currency_data_from.name)
+  });   
+  
+  currency_control_to = new FormGroup({
+    toInputControl: new FormControl('',Validators.pattern(/^\d+([.])?(\d+)?$/)),
+    toSelectControl: new FormControl(this.currency_data_to.name)
+  });
+
+currency_convertor(amount: String, from: String, to: String, order: String): Number {
+  let first_currency = 0,
+      second_currency = 0;
+  if (order == "from-to"){
+    first_currency = from == "USD" ? this.usd : from == "EUR" ? this.eur : 1;
+    second_currency = to == "USD" ? this.usd : to == "EUR" ? this.eur : 1;
+  }else{
+    first_currency = to == "USD" ? this.usd : to == "EUR" ? this.eur : 1;
+    second_currency = from == "USD" ? this.usd : from == "EUR" ? this.eur : 1;
+  }       
+   return parseFloat((Number(amount) * first_currency / second_currency).toFixed(2));    
+}
+
+currency_from_input(event: any): void{   
+  if (event.target.value != ""){    
+    let currency_value = event.target.value;    
+    currency_value = this.currency_convertor(currency_value, this.currency_data_from.name, this.currency_data_to.name, "from-to"); 
+    console.log(currency_value);
+    this.currency_control_to.get('toInputControl')!.setValue(currency_value);    
+  }  
+  else{
+    this.currency_control_to.get('toInputControl')!.setValue('0'); 
   }
+}
+
+currency_to_input(event: any): void{   
+  if (event.target.value != ""){    
+    let currency_value = event.target.value;    
+    currency_value = this.currency_convertor(currency_value, this.currency_data_from.name, this.currency_data_to.name, "to-from");
+    console.log(currency_value);
+    this.currency_control_from.get('fromInputControl')!.setValue(currency_value);
+  }  
+  else{
+    this.currency_control_from.get('fromInputControl')!.setValue('0');
+  }
+}
+
+currency_from_change(event: any): void{  
+  let currency_index = this.currency_list.name.indexOf(event.value);
+  this.currency_data_from = {
+    name: this.currency_list.name[currency_index],
+    symb: this.currency_list.symb[currency_index]
+  };
+  let currency_value : any =  this.currency_control_from.get('fromInputControl')?.value;
+  currency_value = this.currency_convertor(currency_value, this.currency_data_from.name, this.currency_data_to.name, 'from-to');  
+  this.currency_control_to.get('toInputControl')!.setValue(currency_value);      
+}
+                            
+currency_to_change(event: any): void{  
+  let currency_index = this.currency_list.name.indexOf(event.value);
+  this.currency_data_to = {
+    name: this.currency_list.name[currency_index],
+    symb: this.currency_list.symb[currency_index]
+  };
+  let currency_value : any =  this.currency_control_to.get('toInputControl')?.value;
+  currency_value = this.currency_convertor(currency_value, this.currency_data_from.name, this.currency_data_to.name, 'to-from');  
+  this.currency_control_from.get('fromInputControl')!.setValue(currency_value);    
+}
+
 }
