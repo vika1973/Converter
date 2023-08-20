@@ -16,5 +16,5 @@ export class CurrencyComponent {
       cc: "",
       rate: 0
     }   
-    ];                     
+    ];       
 }

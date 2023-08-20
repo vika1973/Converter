@@ -23,19 +23,11 @@ span {
 }
 
 mat-form-field {
-  height: 100px;
+  height: 120px;  
 }
 
 mat-label{
   font-size: 20px;   
-}
-
-mat-select{
-  border: 10px;
-  height: 1px;
-  padding: 0px 10px 0px 10px;
-  border-radius: 10px;
-  cursor: pointer;
 }
 
 mat-error{

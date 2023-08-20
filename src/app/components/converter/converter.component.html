@@ -11,10 +11,9 @@
   <mat-form-field appearance="outline">    
     <span style="color: rgb(226, 101, 18);" matTextPrefix>{{ currency_data_from.symb }}</span>
     <input matInput formControlName="fromInputControl" placeholder="Enter Amount" (input)="currency_from_input($event)" (focusout)="currency_from_input($event)">            
-    <mat-error *ngIf='this.currency_control_from.get("fromInputControl")!.status == "INVALID"'>Invalid amount number (accesable only: numbers, and dot). Example: 12000.35</mat-error>
+    <mat-error *ngIf='this.currency_control_from?.get("fromInputControl")!.status == "INVALID"'>Invalid amount number (accesable only: numbers, and dot). Example: 12000.35</mat-error>
   </mat-form-field>         
 </form>
-
 <form class="currency_to" [formGroup]="currency_control_to">      
   <mat-form-field appearance="outline">
     <mat-label>Отримую</mat-label>
@@ -27,6 +26,6 @@
   <mat-form-field appearance="outline">
     <span style="color: rgb(226, 101, 18);" matTextPrefix>{{ currency_data_to.symb }}</span>
     <input matInput formControlName="toInputControl" placeholder="Enter Amount" (input)="currency_to_input($event)" (focusout)="currency_to_input($event)">
-    <mat-error *ngIf='this.currency_control_to.get("toInputControl")!.status == "INVALID"'>Invalid amount number (accesable only: numbers, and dot). Example: 12000.35</mat-error>
+    <mat-error *ngIf='this.currency_control_to?.get("toInputControl")!.status == "INVALID"'>Invalid amount number (accesable only: numbers, and dot). Example: 12000.35</mat-error>
   </mat-form-field>         
 </form>
