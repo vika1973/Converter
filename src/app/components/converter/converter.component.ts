@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges, numberAttribute } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { CurrencyDataService } from '../services/currency-data.service';
 
@@ -12,14 +12,9 @@ export class ConverterComponent implements OnInit{
   title = 'Конвертер валют';
   
   constructor(public api: CurrencyDataService){  } 
-  
-  @Input() currencies: any = [
-    {
-      cc: "",
-      rate: 0
-    }   
-    ];                     
-    
+ 
+  @Input() currencies: any[] = [];  
+
   @Input() usd : number = 0;
   @Input() eur : number = 0;
 
@@ -46,7 +41,7 @@ export class ConverterComponent implements OnInit{
   currency_data_to = {
     name: "",
     symb: "",  
-  }
+  }  
 
   ngOnInit(): void {              
     this.currency_list = { name: ["USD", "EUR", "UAH"], symb: ["$", "€", "₴"] };
@@ -54,12 +49,15 @@ export class ConverterComponent implements OnInit{
     this.currency_data_to = { name: this.currency_list.name[1], symb: this.currency_list.symb[1] };                                        
 
     this.currency_control_from.controls.fromSelectControl.setValue(this.currency_data_from.name);
-    this.currency_control_to.controls.toSelectControl.setValue(this.currency_data_to.name);
-  }   
+    this.currency_control_to.controls.toSelectControl.setValue(this.currency_data_to.name);  
+    
+    this.api.getCurrencies().subscribe(res => console.table(res))
+  } 
 
   currency_convertor(amount: String, from: String, to: String, order: String): Number {
-    let first_currency = 0,
-    second_currency = 0;
+    let first_currency = 0;
+    let second_currency = 0;        
+
     if (order == "from-to"){
       first_currency = from == "USD" ? this.usd : from == "EUR" ? this.eur : 1;
       second_currency = to == "USD" ? this.usd : to == "EUR" ? this.eur : 1;
@@ -116,4 +114,5 @@ export class ConverterComponent implements OnInit{
     currency_value = this.currency_convertor(currency_value, this.currency_data_from.name, this.currency_data_to.name, 'to-from');  
     this.currency_control_from.get('fromInputControl')!.setValue(currency_value);    
   }
-}
+        
+  }

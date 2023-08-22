@@ -6,15 +6,11 @@ import { CurrencyDataService } from '../services/currency-data.service';
   templateUrl: './currency.component.html',
   styleUrls: ['./currency.component.css']
 })
-export class CurrencyComponent {
+export class CurrencyComponent{
   title = 'Курси валют';  
 
   constructor(public api: CurrencyDataService){  }   
   
-  @Input() currencies: any = [
-    {
-      cc: "",
-      rate: 0
-    }   
-    ];       
+  @Input() currencies: any[] = [];  
+              
 }
